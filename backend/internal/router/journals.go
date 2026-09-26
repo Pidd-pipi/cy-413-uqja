@@ -8,6 +8,7 @@ import (
 func RegisterJournals(g *gin.RouterGroup, h *handler.JournalHandler, auth gin.HandlerFunc) {
 	p := g.Group("/journals", auth)
 	p.GET("", h.List)
+	p.GET("/prompts", h.Prompts)
 	p.POST("", h.Create)
 	p.PUT("/:id", h.Update)
 	p.DELETE("/:id", h.Delete)

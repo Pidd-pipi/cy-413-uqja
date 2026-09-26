@@ -5,3 +5,8 @@ type Response struct {
 	Message string `json:"message"`
 	Data    any    `json:"data,omitempty"`
 }
+
+type JournalPromptsResponse struct {
+	Band    string   `json:"band"`
+	Prompts []string `json:"prompts"`
+}

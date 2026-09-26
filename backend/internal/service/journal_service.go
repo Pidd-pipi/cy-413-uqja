@@ -19,7 +19,7 @@ func NewJournalService(r repository.JournalRepository, l *slog.Logger) *JournalS
 	return &JournalService{r, l}
 }
 func (s *JournalService) Create(uid uint, req dto.JournalRequest) (*model.Journal, error) {
-	v := &model.Journal{UserID: uid, Title: req.Title, Content: req.Content, MoodLevel: req.MoodLevel, Weather: req.Weather, IsPrivate: req.IsPrivate}
+	v := &model.Journal{UserID: uid, Title: req.Title, Content: req.Content, MoodLevel: req.MoodLevel, Weather: req.Weather, Prompt: req.Prompt, IsPrivate: req.IsPrivate}
 	if e := s.repo.Create(v); e != nil {
 		return nil, fmt.Errorf("Journal[user_id] create failed: %w", e)
 	}
@@ -43,6 +43,7 @@ func (s *JournalService) Update(uid, id uint, req dto.JournalRequest) (*model.Jo
 	v.Content = req.Content
 	v.MoodLevel = req.MoodLevel
 	v.Weather = req.Weather
+	v.Prompt = req.Prompt
 	v.IsPrivate = req.IsPrivate
 	if e = s.repo.Update(v); e != nil {
 		return nil, util.WrapEntity("Journal", "content", id, constants.CodeInternal, e)
@@ -60,4 +61,12 @@ func (s *JournalService) Delete(uid, id uint) error {
 	}
 	s.logger.Info(constants.LogJournalDeleted, "journal_id", id)
 	return nil
+}
+
+// Prompts 按心情指数返回对应区间的书写提示；区间数据来自 constants，文案格式化走 util
+func (s *JournalService) Prompts(level int) dto.JournalPromptsResponse {
+	band := util.MoodLevelBand(level)
+	prompts := constants.JournalPrompts[band]
+	s.logger.Info(constants.LogJournalPromptsListed, "mood_level", level, "band", band, "count", len(prompts), "fallback", constants.MessageJournalPromptFallback)
+	return dto.JournalPromptsResponse{Band: util.JournalBandText(band), Prompts: prompts}
 }

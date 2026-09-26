@@ -15,3 +15,19 @@ func AssessmentText(c string) string {
 	return m[c]
 }
 func ThemeColor(t string) string { return constants.ThemeColors[t] }
+
+// MoodLevelBand 把 1-10 的心情指数映射到书写提示区间，越界时回落到中间档
+func MoodLevelBand(level int) string {
+	switch {
+	case level >= 1 && level <= 3:
+		return constants.JournalBandLow
+	case level >= 8 && level <= 10:
+		return constants.JournalBandHigh
+	default:
+		return constants.JournalBandMid
+	}
+}
+func JournalBandText(b string) string {
+	m := map[string]string{constants.JournalBandLow: "低落", constants.JournalBandMid: "平稳", constants.JournalBandHigh: "明媚"}
+	return m[b]
+}

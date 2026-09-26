@@ -36,5 +36,6 @@ type JournalRequest struct {
 	Content   string `json:"content" validate:"required,max=5000"`
 	MoodLevel int    `json:"mood_level" validate:"min=1,max=10"`
 	Weather   string `json:"weather" validate:"max=30"`
+	Prompt    string `json:"prompt" validate:"max=200"`
 	IsPrivate bool   `json:"is_private"`
 }

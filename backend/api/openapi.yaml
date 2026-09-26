@@ -6,3 +6,4 @@ paths:
   /v1/moods: {get: {summary: List moods}, post: {summary: Create mood}}
   /v1/assessments: {get: {summary: List assessments}}
   /v1/journals: {get: {summary: List journals}, post: {summary: Create journal}}
+  /v1/journals/prompts: {get: {summary: List three writing prompts for a mood_level (1-10), grouped by band low/mid/high}}

@@ -41,6 +41,12 @@ func (h *JournalHandler) Create(c *gin.Context) {
 	}
 	created(c, v)
 }
+
+// Prompts 返回当前心情指数对应的三条书写提示；mood_level 缺失或越界时回落到中间档
+func (h *JournalHandler) Prompts(c *gin.Context) {
+	lvl, _ := strconv.Atoi(c.Query("mood_level"))
+	ok(c, h.s.Prompts(lvl))
+}
 func (h *JournalHandler) Update(c *gin.Context) {
 	id, e := strconv.ParseUint(c.Param("id"), 10, 64)
 	if e != nil {
