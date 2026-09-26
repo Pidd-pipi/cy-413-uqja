@@ -7,6 +7,7 @@ type Journal struct {
 	UserID    uint      `gorm:"index;not null" json:"user_id"`
 	Title     string    `gorm:"not null" json:"title"`
 	Content   string    `gorm:"type:text;not null" json:"content"`
+	Prompt    string    `gorm:"type:text;not null;default:''" json:"prompt"`
 	MoodLevel int       `json:"mood_level"`
 	Weather   string    `json:"weather"`
 	IsPrivate bool      `gorm:"default:true" json:"is_private"`

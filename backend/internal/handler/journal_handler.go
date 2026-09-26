@@ -29,6 +29,20 @@ func (h *JournalHandler) List(c *gin.Context) {
 	h.logger.Info(constants.LogJournalListed)
 	ok(c, v)
 }
+func (h *JournalHandler) Prompts(c *gin.Context) {
+	lvl, e := strconv.Atoi(c.Query("mood_level"))
+	if e != nil {
+		c.Error(util.NewAppError(constants.CodeValidation, "Journal[mood_level] prompts failed: mood_level must be an integer 1-10", e))
+		return
+	}
+	v, e := h.s.Prompts(lvl)
+	if e != nil {
+		c.Error(e)
+		return
+	}
+	h.logger.Info(constants.LogJournalPromptsRead, "mood_level", lvl)
+	ok(c, v)
+}
 func (h *JournalHandler) Create(c *gin.Context) {
 	var r dto.JournalRequest
 	if !bind(c, &r) {

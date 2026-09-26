@@ -19,7 +19,7 @@ func NewJournalService(r repository.JournalRepository, l *slog.Logger) *JournalS
 	return &JournalService{r, l}
 }
 func (s *JournalService) Create(uid uint, req dto.JournalRequest) (*model.Journal, error) {
-	v := &model.Journal{UserID: uid, Title: req.Title, Content: req.Content, MoodLevel: req.MoodLevel, Weather: req.Weather, IsPrivate: req.IsPrivate}
+	v := &model.Journal{UserID: uid, Title: req.Title, Content: req.Content, Prompt: req.Prompt, MoodLevel: req.MoodLevel, Weather: req.Weather, IsPrivate: req.IsPrivate}
 	if e := s.repo.Create(v); e != nil {
 		return nil, fmt.Errorf("Journal[user_id] create failed: %w", e)
 	}
@@ -41,6 +41,7 @@ func (s *JournalService) Update(uid, id uint, req dto.JournalRequest) (*model.Jo
 	}
 	v.Title = req.Title
 	v.Content = req.Content
+	v.Prompt = req.Prompt
 	v.MoodLevel = req.MoodLevel
 	v.Weather = req.Weather
 	v.IsPrivate = req.IsPrivate
@@ -49,6 +50,14 @@ func (s *JournalService) Update(uid, id uint, req dto.JournalRequest) (*model.Jo
 	}
 	s.logger.Info(constants.LogJournalUpdated, "journal_id", id)
 	return v, nil
+}
+func (s *JournalService) Prompts(level int) ([]string, error) {
+	p, found := constants.JournalPrompts[level]
+	if !found {
+		return nil, util.NewAppError(constants.CodeValidation, fmt.Sprintf("Journal[mood_level=%d] prompts failed: mood_level out of range 1-10", level), nil)
+	}
+	s.logger.Info(constants.LogJournalPromptsRead, "mood_level", level)
+	return p, nil
 }
 func (s *JournalService) Delete(uid, id uint) error {
 	v, e := s.repo.ByID(id, uid)

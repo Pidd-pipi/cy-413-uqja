@@ -34,6 +34,7 @@ type TakeAssessmentRequest struct {
 type JournalRequest struct {
 	Title     string `json:"title" validate:"required,max=120"`
 	Content   string `json:"content" validate:"required,max=5000"`
+	Prompt    string `json:"prompt" validate:"max=200"`
 	MoodLevel int    `json:"mood_level" validate:"min=1,max=10"`
 	Weather   string `json:"weather" validate:"max=30"`
 	IsPrivate bool   `json:"is_private"`

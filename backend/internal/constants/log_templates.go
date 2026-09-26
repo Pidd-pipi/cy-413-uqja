@@ -18,6 +18,7 @@ const (
 	LogAssessmentResult   = "Assessment result generated"
 	LogJournalCreated     = "Journal created"
 	LogJournalListed      = "Journal list requested"
+	LogJournalPromptsRead = "Journal prompts requested for mood_level"
 	LogJournalUpdated     = "Journal updated"
 	LogJournalDeleted     = "Journal deleted"
 	LogAuditWrite         = "audit write action"
